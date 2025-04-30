@@ -1,0 +1,6 @@
+{
+  "watch": ["src", ".env", "views"],
+  "ext": ".ts,.js,.yaml,.jade",
+  "ignore": [],
+  "exec": "npx ts-node ./src/index.ts .env "
+}

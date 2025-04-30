@@ -1,0 +1,29 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Xác minh tài khoản</title>
+    <style>
+      body { font-family: Arial, sans-serif; max-width: 500px; margin: 20px auto; padding: 20px; border: 1px solid #ddd;
+      border-radius: 10px; background-color: #f9f9f9; } .tieude { font-size: 18px; font-weight: bold; color: #333;
+      margin-bottom: 15px; } .btn { display: inline-block; padding: 10px 20px; font-size: 14px; font-weight: bold;
+      text-decoration: none; color: white; background-color: #4caf50; border-radius: 25px; transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border: none; cursor: pointer; } .btn:hover { background-color: #45a049;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); } div { margin-bottom: 15px; }
+    </style>
+  </head>
+  <body>
+    <div class='tieude'>Kính chào quý khách {{name}} thân mến!</div>
+    <div>
+      Chúng tôi đã nhận được yêu cầu thay đổi mật khẩu từ tài khoản của bạn. Để đảm bảo rằng yêu cầu này đến từ bạn, vui
+      lòng không để lộ mã CODE để tránh những đáng không nên có.
+    </div>
+    <div style='font-weight: bold;color: red'>{{code}}</div>
+
+    <div>
+      Nếu bạn không thực hiện yêu cầu này, xin vui lòng liên hệ với đội ngũ hỗ trợ của chúng tôi ngay lập tức. An toàn
+      của bạn là ưu tiên hàng đầu của chúng tôi.
+    </div>
+    <div>Trân trọng, <b>ABN Restaurant</b> xin cảm ơn.</div>
+  </body>
+</html>
