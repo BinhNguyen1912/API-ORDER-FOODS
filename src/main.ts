@@ -33,8 +33,7 @@ async function bootstrap() {
   console.log(arrayCors)
 
   app.enableCors({
-    origin: arrayCors,
-    credentials: true
+    origin: '*'
   })
 
   //Đăng ký 1 hbs helper để giúp việc tăng số lượng món theo thứ tự
@@ -66,7 +65,7 @@ async function bootstrap() {
     defaultVersion: '1'
   })
 
-  await app.listen(port, () => {
+  await app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on http://localhost:${port}`)
   })
 }

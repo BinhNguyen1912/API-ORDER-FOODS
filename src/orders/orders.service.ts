@@ -20,6 +20,7 @@ import * as Papa from 'papaparse'
 import { DATAORDER } from 'src/common/FakeData'
 import axios from 'axios'
 import { create } from 'domain'
+//682d64ea9fe9c50bb065ab92
 /**
  * CÁC VẤN ĐỀ TRONG VIỆC TẠO ĐƠN HÀNG
  * - Sẽ không cho sửa đơn hàng nếu (đơn hàng đó đã được thanh toán , đơn hàng đó đã được chấp nhận khác pending)
@@ -258,6 +259,8 @@ export class OrdersService extends baseRepository<Order> {
   async OrderOnine(createOrderDto: CreateOrderDto, user: Payload, req: Request, res: Response) {
     //Bat dau 1 session  cho transaction (cua mongoose)
     try {
+      console.log('hehe')
+
       const { cart_id, notes, address, paymentMethod, discount_code, phone } = createOrderDto
       let totalPrice = 0
       const cart = await this.cartService.FindByCartID(cart_id.toString())
@@ -316,9 +319,12 @@ export class OrdersService extends baseRepository<Order> {
       const resuft = await this.orderModule.create({ ...order })
       await this.cartService.CheckOutCart(cart_id.toString())
       //Xu ly truong hop neu chuyen khoan vnpay
-      cart.isOrder = true
+      // cart.isOrder = true
 
       if (paymentMethod == payType.vnpay) {
+        await this.paymentService.createPaymentUrl(req, resuft, res)
+        await Promise.all([this.nodemailerService.sendMailToOrder(resuft._id, 'VNPAY'), cart.save()])
+        await cart.save()
         res.json(await Promise.all([this.paymentService.createPaymentUrl(req, resuft, res), cart.save()]))
       } else if (paymentMethod == payType.cash) {
         await Promise.all([this.nodemailerService.sendMailToOrder(resuft._id, 'Thanh toán tiền mặt'), cart.save()])

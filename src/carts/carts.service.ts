@@ -78,6 +78,32 @@ export class CartsService extends baseRepository<Cart> {
       throw new HttpException(err.message, HttpStatus.UNAUTHORIZED)
     }
   }
+  async GetCartByCartId(cart_id: string) {
+    const cart = await this.CartModule.findById(cart_id).populate([
+      {
+        path: 'foods.foodID',
+        select: 'name price category image',
+        populate: {
+          path: 'category', // Populate category từ foodID
+          select: 'name' // Lấy trường name từ category
+        }
+      }
+    ])
+    if (!cart) {
+      throw new HttpException(messageRespone.CART_NOT_FOUND, HttpStatus.NOT_FOUND)
+    }
+    if (!cart.totalPrice || cart.isModify) {
+      let sum = 0
+      cart.foods.map((item) => {
+        sum += item.quality * (item.foodID as any).price
+      })
+      cart.totalPrice = sum
+      cart.isModify = false
+      await cart.save()
+      return cart
+    }
+    return cart
+  }
 
   async findAll(query: string, limit: number, page: number) {
     try {

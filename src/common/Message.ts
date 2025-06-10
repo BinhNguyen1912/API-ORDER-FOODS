@@ -35,7 +35,7 @@ export const messageRespone = {
   PASSWORD_TOO_SHORT: 'Password too short',
   PASSWORD_AND_CONFIRMPASS_NOT_MATCHES: 'Password and Confirm Password not matches',
   PASSWORD_AND_OLDPASSWORD_NOT_MATCHES: 'Password and OldPassword not matches',
-  WRONG_PASSWORD: 'Wrong Password',
+  WRONG_PASSWORD: 'Sai mật khẩu',
   CATEGORY_IS_EXITS: 'Category is Exits',
   CATEGORY_NOT_EXITS: 'Category not Exits',
   NAME_IS_EXITS: 'Name is Exits',

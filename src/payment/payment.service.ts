@@ -49,6 +49,8 @@ export class PaymentService {
       this.orderService.FindOneByID(ReqOrderId._id.toString()),
       await this.transactionService.findOrderIdOfTransaction(ReqOrderId._id.toString())
     ])
+    console.log('thanh toasn', order)
+
     if (transaction && transaction.status == statusTransaction.success) {
       throw new HttpException(messageRespone.PAIED, HttpStatus.OK)
     }
@@ -170,7 +172,7 @@ export class PaymentService {
       }
       // const encryptOrder = encryptData(queryString)
 
-      res.redirect(`http://localhost:3000/checkout/status?${qs.stringify(queryString)}`)
+      res.redirect(`myapp://payment-success?${qs.stringify(queryString)}`)
     } else {
       res.render('success', { code: '97' })
     }

@@ -39,6 +39,11 @@ export class CartsController {
     return await this.cartsService.findOne(customer_id)
   }
 
+  @Get('/ByCartId/:cart_id')
+  async findOneByCartID(@Param('cart_id') cart_id: string) {
+    return await this.cartsService.GetCartByCartId(cart_id)
+  }
+
   @Patch(':customer_id/foodID/:foodID')
   async update(@Param() params, @Body('quality') quality: number) {
     const { customer_id, foodID } = params

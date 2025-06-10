@@ -106,7 +106,7 @@ export class AuthController {
 
   //Doi mat khau
   @Post('changePassword')
-  @ResponeMessage('Change Success')
+  @ResponeMessage('Đổi mật khẩu thành công')
   async ChangePassword(@Body() changePassword: ChangePasswordDto, @DecodeToken() user: Payload) {
     const id: string = user.user_id.toString()
     return await this.authService.ChangePassword(changePassword, id)
