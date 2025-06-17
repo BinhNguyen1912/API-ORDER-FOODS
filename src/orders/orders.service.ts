@@ -322,10 +322,21 @@ export class OrdersService extends baseRepository<Order> {
       // cart.isOrder = true
 
       if (paymentMethod == payType.vnpay) {
-        await this.paymentService.createPaymentUrl(req, resuft, res)
-        await Promise.all([this.nodemailerService.sendMailToOrder(resuft._id, 'VNPAY'), cart.save()])
+        // await this.paymentService.createPaymentUrl(req, resuft, res)
+        // await Promise.all([this.nodemailerService.sendMailToOrder(resuft._id, 'VNPAY'), cart.save()])
+        // await cart.save()
+        // res.json(await Promise.all([this.paymentService.createPaymentUrl(req, resuft, res), cart.save()]))
+        // 1. Tạo URL thanh toán VNPAY
+        const paymentUrl = await this.paymentService.createPaymentUrl(req, resuft, res)
+
+        // 2. Lưu giỏ hàng
         await cart.save()
-        res.json(await Promise.all([this.paymentService.createPaymentUrl(req, resuft, res), cart.save()]))
+
+        // 3. Gửi email
+        await this.nodemailerService.sendMailToOrder(resuft._id, 'Thanh toàn NCB')
+
+        // 4. Trả về response (nếu cần)
+        res.json(paymentUrl)
       } else if (paymentMethod == payType.cash) {
         await Promise.all([this.nodemailerService.sendMailToOrder(resuft._id, 'Thanh toán tiền mặt'), cart.save()])
         res.json({

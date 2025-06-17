@@ -49,6 +49,19 @@ export class CartsController {
     const { customer_id, foodID } = params
     return await this.cartsService.update(customer_id, quality, foodID)
   }
+  @Post('update')
+  async updateTemp(@Body() body) {
+    const { cart_id, foodID, quality } = body
+    console.log(body)
+
+    return await this.cartsService.updateTemp(cart_id, foodID, quality)
+  }
+
+  @Post('clearFood')
+  async clearFoods(@Body() body) {
+    const { cart_id } = body
+    return await this.cartsService.clearFoods(cart_id)
+  }
 
   @Delete(':customer_id')
   async remove(@Param() params, @Req() req: Request) {

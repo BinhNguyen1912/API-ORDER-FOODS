@@ -7,7 +7,8 @@ export enum status_Order {
   PREPARED = 'PREPARED',
   CANCELED = 'CANCELED',
   SHIPPING = 'SHIPPING',
-  SUCCESS = 'SUCCESS'
+  SUCCESS = 'SUCCESS',
+  Fail = 'Chưa thanh toán thành công'
 }
 export enum payType {
   transfer = 'transfer',

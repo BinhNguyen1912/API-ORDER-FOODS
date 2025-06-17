@@ -15,13 +15,17 @@ import { PaymentModule } from 'src/payment/payment.module'
       useFactory: (configService: ConfigService) => ({
         transport: {
           host: configService.get<string>('EMAIL_HOST'),
-          secure: false,
+          port: +configService.get<string>('EMAIL_PORT') || 587, // thêm port nếu cần
+          secure: false, // Nếu dùng port 465 thì mới để true
           auth: {
             user: configService.get<string>('EMAIL_AUTH_USER'),
             pass: configService.get<string>('EMAIL_AUTH_PASSWORD')
+          },
+          tls: {
+            rejectUnauthorized: false // ⚠️ Bỏ kiểm tra chứng chỉ tự ký
           }
         },
-        preview: configService.get<string>('EMAIL_PREVIEW') == 'true' ? true : false,
+        preview: configService.get<string>('EMAIL_PREVIEW') == 'true',
         defaults: {
           from: `"No Reply" <${configService.get<string>('EMAIL_FROM')}>`
         },

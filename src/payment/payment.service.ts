@@ -33,6 +33,7 @@ import axios from 'axios'
 import { NodemailerService } from 'src/nodemailer/nodemailer.service'
 import { Payload } from 'src/auth/auth.interface'
 import { encryptData } from 'src/common/EncodeParams'
+import { status_Order } from 'src/orders/Schema/order.interface'
 // const moment = require("moment")
 @Injectable()
 export class PaymentService {
@@ -72,7 +73,6 @@ export class PaymentService {
     const returnUrl = this.configService.get<string>('vnp_ReturnUrl')
     const vnp_IpnUrl = this.configService.get<string>('vnp_IpnUrl')
     const ipAddr = this.getClientIp(req)
-    console.log('IpnUrl', vnp_IpnUrl)
 
     const vnp_Params = {
       vnp_Version: '2.1.0',
@@ -140,6 +140,7 @@ export class PaymentService {
       } else {
         status = statusTransaction.failed
         order.transactionId = vnp_TxnRef
+        order.status = status_Order.Fail
         await Promise.all([
           this.nodemailerService.sendMailToOrder(
             order._id,

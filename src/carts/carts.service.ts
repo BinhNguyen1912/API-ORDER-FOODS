@@ -234,6 +234,63 @@ export class CartsService extends baseRepository<Cart> {
 
     return resuft
   }
+  // cart.service.ts
+  async updateTemp(cart_id: string, foodID: string, quality: number) {
+    if (!isValidObjectId(cart_id) || !isValidObjectId(foodID)) {
+      throw new HttpException('Invalid ObjectId', HttpStatus.UNPROCESSABLE_ENTITY)
+    }
+
+    const cartObjectId = new Types.ObjectId(cart_id)
+    const foodObjectId = new Types.ObjectId(foodID)
+
+    if (quality === 0) {
+      // Nếu số lượng = 0 => xóa món khỏi giỏ
+      return await this.CartModule.findOneAndUpdate(
+        { _id: cartObjectId, 'foods.foodID': foodObjectId },
+        { $pull: { foods: { foodID: foodObjectId } }, $set: { isModify: true } },
+        { returnDocument: 'after' }
+      )
+    }
+
+    // Nếu món đã tồn tại => cập nhật số lượng
+    const existing = await this.CartModule.findOne({
+      _id: cartObjectId,
+      'foods.foodID': foodObjectId
+    })
+
+    if (existing) {
+      return await this.CartModule.findOneAndUpdate(
+        { _id: cartObjectId, 'foods.foodID': foodObjectId },
+        {
+          $set: {
+            'foods.$.quality': quality,
+            isModify: true
+          }
+        },
+        { returnDocument: 'after' }
+      )
+    } else {
+      // Nếu món chưa có => thêm mới
+      return await this.CartModule.findOneAndUpdate(
+        { _id: cartObjectId },
+        {
+          $push: {
+            foods: { foodID: foodObjectId, quality }
+          },
+          $set: { isModify: true }
+        },
+        { returnDocument: 'after' }
+      )
+    }
+  }
+  // cart.service.ts
+  async clearFoods(cartId: string) {
+    return await this.CartModule.findByIdAndUpdate(
+      cartId,
+      { $set: { foods: [] } }, // xóa toàn bộ món ăn trong mảng
+      { new: true } // trả về document đã cập nhật
+    )
+  }
 
   async remove(customer_id: string, foodIDs: string[]) {
     if (!isValidObjectId(customer_id) || !foodIDs.every((item) => isValidObjectId(item))) {
