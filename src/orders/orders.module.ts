@@ -10,6 +10,7 @@ import { NodemailerService } from 'src/nodemailer/nodemailer.service'
 import { PaymentModule } from 'src/payment/payment.module'
 import { CartsModule } from 'src/carts/carts.module'
 import { DiscountModule } from 'src/discount/discount.module'
+import { OrderFoodHistoryModule } from 'src/order-food-history/order-food-history.module'
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { DiscountModule } from 'src/discount/discount.module'
     ]),
     forwardRef(() => PaymentModule),
     CartsModule,
-    DiscountModule
+    DiscountModule,
+    OrderFoodHistoryModule
   ],
   controllers: [OrdersController],
   providers: [OrdersService],

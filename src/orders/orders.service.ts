@@ -20,6 +20,8 @@ import * as Papa from 'papaparse'
 import { DATAORDER } from 'src/common/FakeData'
 import axios from 'axios'
 import { create } from 'domain'
+import { OrderFoodHistory } from 'src/order-food-history/Schema/order-food-history.entity'
+import { OrderFoodHistoryService } from 'src/order-food-history/order-food-history.service'
 //682d64ea9fe9c50bb065ab92
 /**
  * CÁC VẤN ĐỀ TRONG VIỆC TẠO ĐƠN HÀNG
@@ -36,7 +38,8 @@ export class OrdersService extends baseRepository<Order> {
     private readonly paymentService: PaymentService,
     @Inject(forwardRef(() => CartsService))
     private readonly cartService: CartsService,
-    private discountService: DiscountService
+    private discountService: DiscountService,
+    private orderHistory: OrderFoodHistoryService
   ) {
     super(orderModule)
   }
@@ -317,6 +320,26 @@ export class OrdersService extends baseRepository<Order> {
 
       //Tao moi don hang
       const resuft = await this.orderModule.create({ ...order })
+      console.log('Created Order', resuft)
+      console.log({
+        order_id: resuft._id.toString(),
+        id_customer: user.user_id.toString(),
+        foods: cart.foods.map((item) => ({
+          foodID: item.foodID.toString(), // ✅ ép kiểu về string
+          quantity: item.quality
+        }))
+      })
+
+      const orderHistory = await this.orderHistory.saveOrderFoodHistory({
+        order_id: resuft._id.toString(),
+        id_customer: user.user_id.toString(),
+        foods: cart.foods.map((item) => ({
+          foodID: item.foodID._id.toString(),
+          quantity: item.quality
+        }))
+      })
+      console.log('Created OrderHistory', orderHistory)
+
       await this.cartService.CheckOutCart(cart_id.toString())
       //Xu ly truong hop neu chuyen khoan vnpay
       // cart.isOrder = true

@@ -34,6 +34,7 @@ import { ConversationModule } from './conversation/conversation.module'
 import { GoogleStrategy } from './auth/passport/google.strategy'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { APP_GUARD } from '@nestjs/core'
+import { OrderFoodHistoryModule } from './order-food-history/order-food-history.module';
 @Module({
   imports: [
     CacheModule.register({
@@ -78,7 +79,8 @@ import { APP_GUARD } from '@nestjs/core'
     DiscountModule,
     UserVoucherModule,
     GatewayModule,
-    ConversationModule
+    ConversationModule,
+    OrderFoodHistoryModule
   ],
   controllers: [AppController],
   providers: [
